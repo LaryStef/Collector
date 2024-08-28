@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "cryptodeal-collector"
+version = "0.1.0"
+description = "Collects data for CryptoDeal"
+authors = ["LaryStef <timurkotov1999@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+celery = "^5.4.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
