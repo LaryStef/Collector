@@ -1,5 +1,5 @@
 #!/bin/bash
 
 pkill -f "beat"
-pkill -f "worker"
+pkill -f "celery"
 echo celery stopped
