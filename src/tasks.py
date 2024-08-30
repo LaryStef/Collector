@@ -4,6 +4,7 @@ from pydantic import ValidationError
 
 from . import celery
 from .models import CryptoCourse
+from .database.service import CRUD
 from .config import API_KEY
 
 
@@ -14,13 +15,7 @@ from .config import API_KEY
     time_limit=15
 )
 def collect_prices(self) -> None:
-    # TODO get cryptocurrency tickers
-
-    tickers = [
-        "btc",
-        "eth",
-        "sol"
-    ]
+    tickers: list[str] = CRUD.get_cryptocurrency_tickers()
 
     r: requests.Response = requests.get(url=f"https://www.worldcoinindex.com/apiservice/ticker?key={API_KEY}&label={"btc-".join(tickers) + "btc"}&fiat=usd")  # noqa E501
 
