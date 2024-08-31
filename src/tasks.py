@@ -3,7 +3,7 @@ import requests
 from pydantic import ValidationError
 
 from . import celery
-from .models import CryptoCourse
+from .models import CryptoData
 from .database.service import CRUD
 from .config import API_KEY
 
@@ -23,12 +23,10 @@ def collect_prices(self) -> None:
         self.retry()
 
     try:
-        courses: CryptoCourse = CryptoCourse.model_validate_json(r.text)
+        courses: CryptoData = CryptoData.model_validate_json(r.text)
     except ValidationError:
         self.retry()
 
-    for currency in courses.Markets:
-        # TODO save price
-
-        import pprint
-        pprint.pprint(currency)
+    for course in courses.Markets:
+        course.label = course.label.split("/")[0]
+        CRUD.update_crypto(course)
