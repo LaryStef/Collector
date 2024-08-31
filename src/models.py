@@ -8,5 +8,5 @@ class Ticker(BaseModel):
     volume: float = Field(alias="Volume_24h")
 
 
-class CryptoCourse(BaseModel):
+class CryptoData(BaseModel):
     Markets: list[Ticker]
