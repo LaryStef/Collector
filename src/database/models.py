@@ -23,3 +23,9 @@ class CryptoCourse(Base):
     ticker: Mapped[str] = mapped_column(ForeignKey("cryptocurrency.ticker"))
     time_frame: Mapped[str] = mapped_column(String(16))
     price: Mapped[float] = mapped_column(Float, default=0)
+
+    def __init__(self, ID: str, ticker: str, time_frame: str, price: float):
+        self.ID = ID
+        self.ticker = ticker
+        self.time_frame = time_frame
+        self.price = price
