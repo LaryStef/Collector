@@ -16,6 +16,6 @@ broker_transport_options: dict[str, int] = {
 beat_schedule: dict[str, dict[str, str | crontab]] = {
         "collect-data": {
             "task": "src.tasks.collect_prices",
-            "schedule": 30  # crontab(minute=0)
+            "schedule": crontab(minute=0)
         }
 }
