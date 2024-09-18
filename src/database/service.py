@@ -1,6 +1,6 @@
 from datetime import datetime, UTC
 
-from sqlalchemy import select, Result, Connection
+from sqlalchemy import select, Result, Connection, ScalarResult
 from sqlalchemy.orm import Session
 
 from . import engine
@@ -32,15 +32,15 @@ class CRUD():
             if hour == "hour0":
                 cls.update_course(session, course, day)
 
-            if day == "day1" or day == "day15":
+            if day == "day1" or day == "day16":
                 if day == "day1":
                     month += "fst"
-                elif day == "day15":
+                elif day == "day16":
                     month += "mid"
 
                 cls.update_course(session, course, month)
 
-            currency_raw: CryptoCurrency = session.query(
+            currency_raw: ScalarResult[CryptoCurrency] = session.query(
                 CryptoCurrency).where(
                 CryptoCurrency.ticker == course.label).first()
 
@@ -48,7 +48,7 @@ class CRUD():
             session.commit()
 
     def update_course(session: Connection, course: Ticker, time: str) -> None:
-        course_raw: CryptoCourse | None = session.query(
+        course_raw: ScalarResult[CryptoCourse] | None = session.query(
             CryptoCourse).where(
             CryptoCourse.ticker == course.label).where(
             CryptoCourse.time_frame == time).first()
@@ -57,7 +57,7 @@ class CRUD():
             course_raw.price = course.price
             return
 
-        new_course: CryptoCourse = CryptoCourse(
+        new_course: ScalarResult[CryptoCourse] = CryptoCourse(
             ID=generate_id(16),
             ticker=course.label,
             time_frame=time,
