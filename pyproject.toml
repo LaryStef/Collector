@@ -4,9 +4,10 @@ version = "0.1.0"
 description = "Collects data for CryptoDeal"
 authors = ["LaryStef <timurkotov1999@gmail.com>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
 celery = "^5.4.0"
 pydantic = "^2.8.2"
 redis = "^5.0.8"
