@@ -37,8 +37,7 @@ class CRUD():
                     session,
                     course,
                     type="month",
-                    number=month,
-                    extra="first" if day == 1 else "middle"
+                    number=month*2 if day == 16 else month*2-1,
                 )
 
             currency_raw: ScalarResult[CryptoCurrency] = session.query(
@@ -54,14 +53,12 @@ class CRUD():
         *,
         type: str,
         number: int,
-        extra: str = None
     ) -> None:
         course_raw: ScalarResult[CryptoCourse] | None = session.query(
             CryptoCourse).where(
             CryptoCourse.ticker == course.label).where(
             CryptoCourse.type_ == type).where(
-            CryptoCourse.number == number).where(
-            CryptoCourse.extra == extra).first()
+            CryptoCourse.number == number).first()
 
         if course_raw is not None:
             course_raw.price = course.price
@@ -72,7 +69,6 @@ class CRUD():
             ticker=course.label,
             type_=type,
             number=number,
-            extra=extra,
             price=course.price
         )
         session.add(new_course)
