@@ -14,7 +14,7 @@ class CRUD():
     def get_cryptocurrency_tickers() -> list[str]:
         with Session(engine) as session:
 
-            result: Result = session.execute(
+            result: Result[CryptoCurrency] = session.execute(
                 select(CryptoCurrency.ticker)
             )
 
@@ -23,22 +23,23 @@ class CRUD():
     @classmethod
     def update_crypto(cls, course: Ticker) -> None:
         with Session(engine) as session:
-            hour: str = "hour" + str(datetime.now(UTC).hour)
-            day: str = "day" + str(datetime.now(UTC).date().day)
-            month: str = "month" + str(datetime.now(UTC).date().month)
+            hour: int = datetime.now(UTC).hour
+            day: int = datetime.now(UTC).date().day
+            month: int = datetime.now(UTC).month
 
-            cls.update_course(session, course, hour)
+            cls.update_course(session, course, type="hour", number=hour)
 
-            if hour == "hour0":
-                cls.update_course(session, course, day)
+            if hour == 0:
+                cls.update_course(session, course, type="day", number=day)
 
-            if day == "day1" or day == "day16":
-                if day == "day1":
-                    month += "fst"
-                elif day == "day16":
-                    month += "mid"
-
-                cls.update_course(session, course, month)
+            if day == 1 or day == 16:
+                cls.update_course(
+                    session,
+                    course,
+                    type="month",
+                    number=month,
+                    extra="first" if day == 1 else "middle"
+                )
 
             currency_raw: ScalarResult[CryptoCurrency] = session.query(
                 CryptoCurrency).where(
@@ -47,11 +48,20 @@ class CRUD():
             currency_raw.volume = course.volume
             session.commit()
 
-    def update_course(session: Connection, course: Ticker, time: str) -> None:
+    def update_course(
+        session: Connection,
+        course: Ticker,
+        *,
+        type: str,
+        number: int,
+        extra: str = None
+    ) -> None:
         course_raw: ScalarResult[CryptoCourse] | None = session.query(
             CryptoCourse).where(
             CryptoCourse.ticker == course.label).where(
-            CryptoCourse.time_frame == time).first()
+            CryptoCourse.type_ == type).where(
+            CryptoCourse.number == number).where(
+            CryptoCourse.extra == extra).first()
 
         if course_raw is not None:
             course_raw.price = course.price
@@ -60,7 +70,9 @@ class CRUD():
         new_course: ScalarResult[CryptoCourse] = CryptoCourse(
             ID=generate_id(16),
             ticker=course.label,
-            time_frame=time,
+            type_=type,
+            number=number,
+            extra=extra,
             price=course.price
         )
         session.add(new_course)

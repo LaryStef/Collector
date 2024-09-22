@@ -1,4 +1,4 @@
-from sqlalchemy import Float, ForeignKey, String
+from sqlalchemy import Float, ForeignKey, String, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship, DeclarativeBase
 
 
@@ -17,15 +17,28 @@ class CryptoCurrency(Base):
 
 
 class CryptoCourse(Base):
-    __tablename__: str = "crypto_course"
+    __tablename__: str = "CryptoCourse"
 
     ID: Mapped[str] = mapped_column(String(16), primary_key=True)
-    ticker: Mapped[str] = mapped_column(ForeignKey("cryptocurrency.ticker"))
-    time_frame: Mapped[str] = mapped_column(String(16))
+    ticker: Mapped[str] = mapped_column(ForeignKey("Cryptocurrency.ticker"))
     price: Mapped[float] = mapped_column(Float, default=0)
+    type_: Mapped[str] = mapped_column("type", String(8))
+    number: Mapped[int] = mapped_column(Integer)
+    extra: Mapped[str] = mapped_column(String(16), nullable=True)
 
-    def __init__(self, ID: str, ticker: str, time_frame: str, price: float):
+    def __init__(
+        self,
+        *,
+        ID: str,
+        ticker: str,
+        price: float,
+        type_: str,
+        number: int,
+        extra: str = None
+    ) -> None:
         self.ID = ID
         self.ticker = ticker
-        self.time_frame = time_frame
         self.price = price
+        self.type_ = type_
+        self.number = number
+        self.extra = extra
