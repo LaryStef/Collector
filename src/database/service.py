@@ -1,12 +1,12 @@
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 
-from sqlalchemy import select, Result, Connection, ScalarResult
+from sqlalchemy import Connection, Result, ScalarResult, select
 from sqlalchemy.orm import Session
 
-from . import engine
-from .models import CryptoCurrency, CryptoCourse
-from ..models import Ticker
-from ..generator import generate_id
+from src.generator import generate_id
+from src.models import Ticker
+from database import engine
+from database.models import CryptoCourse, CryptoCurrency
 
 
 class CRUD():
