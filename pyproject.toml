@@ -13,11 +13,16 @@ pydantic = "^2.8.2"
 redis = "^5.0.8"
 sqlalchemy = "^2.0.32"
 psycopg2-binary = "^2.9.9"
+requests = "^2.32.3"
 
 
 [tool.poetry.group.dev.dependencies]
 python-dotenv = "^1.0.1"
+isort = "^5.13.2"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+lines_after_imports = 2
