@@ -1,0 +1,20 @@
+from typing import TYPE_CHECKING
+
+from sqlalchemy import Float, String
+from sqlalchemy.orm import relationship, mapped_column, Mapped
+
+from .base import Base
+
+
+if TYPE_CHECKING:
+    from .cryptocourse import CryptoCourse
+
+
+class CryptoCurrency(Base):
+    __tablename__: str = "Cryptocurrency"
+
+    ticker: Mapped[str] = mapped_column(String(8), primary_key=True)
+    name: Mapped[str] = mapped_column(String(32))
+    description: Mapped[str] = mapped_column(String(4096))
+    volume: Mapped[float] = mapped_column(Float, default=0)
+    crypto_course: Mapped[list["CryptoCourse"]] = relationship()

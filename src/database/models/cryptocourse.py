@@ -1,19 +1,7 @@
-from sqlalchemy import Float, ForeignKey, String, Integer
-from sqlalchemy.orm import Mapped, mapped_column, relationship, DeclarativeBase
+from sqlalchemy import String, Float, Integer, ForeignKey
+from sqlalchemy.orm import mapped_column, Mapped
 
-
-class Base(DeclarativeBase):
-    pass
-
-
-class CryptoCurrency(Base):
-    __tablename__: str = "cryptocurrency"
-
-    ticker: Mapped[str] = mapped_column(String(8), primary_key=True)
-    name: Mapped[str] = mapped_column(String(32))
-    description: Mapped[str] = mapped_column(String(4096))
-    volume: Mapped[float] = mapped_column(Float, default=0)
-    crypto_course: Mapped[list["CryptoCourse"]] = relationship()
+from .base import Base
 
 
 class CryptoCourse(Base):
