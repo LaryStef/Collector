@@ -1,11 +1,10 @@
 import requests
-
 from pydantic import ValidationError
 
-from . import celery
-from .models import CryptoData
-from .database.service import CRUD
-from .config import API_KEY
+from src import celery
+from src.config import API_KEY
+from src.database.service import CRUD
+from src.models import CryptoData
 
 
 @celery.task(

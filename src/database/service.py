@@ -3,10 +3,10 @@ from datetime import UTC, datetime
 from sqlalchemy import Connection, Result, ScalarResult, select
 from sqlalchemy.orm import Session
 
-from src.generator import generate_id
-from src.models import Ticker
 from database import engine
 from database.models import CryptoCourse, CryptoCurrency
+from src.generator import generate_id
+from src.models import Ticker
 
 
 class CRUD():
