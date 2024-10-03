@@ -5,9 +5,9 @@ from .base import Base
 
 
 class CryptoCourse(Base):
-    __tablename__: str = "CryptoCourse"
+    # __tablename__: str = "CryptoCourse"
 
-    ID: Mapped[str] = mapped_column(String(16), primary_key=True)
+    ID: Mapped[str] = mapped_column(String(36), primary_key=True)
     ticker: Mapped[str] = mapped_column(ForeignKey("Cryptocurrency.ticker"))
     price: Mapped[float] = mapped_column(Float, default=0)
     type_: Mapped[str] = mapped_column("type", String(8))

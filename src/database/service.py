@@ -1,11 +1,11 @@
 from datetime import UTC, datetime
+from uuid import uuid4
 
 from sqlalchemy import Connection, Result, ScalarResult, select
 from sqlalchemy.orm import Session
 
 from database import engine
 from database.models import CryptoCourse, CryptoCurrency
-from src.generator import generate_id
 from src.models import Ticker
 
 
@@ -65,7 +65,7 @@ class CRUD():
             return
 
         new_course: ScalarResult[CryptoCourse] = CryptoCourse(
-            ID=generate_id(16),
+            ID=uuid4().__str__(),
             ticker=course.label,
             type_=type,
             number=number,

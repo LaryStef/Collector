@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 class CryptoCurrency(Base):
-    __tablename__: str = "Cryptocurrency"
+    # __tablename__: str = "Cryptocurrency"
 
     ticker: Mapped[str] = mapped_column(String(8), primary_key=True)
     name: Mapped[str] = mapped_column(String(32))
