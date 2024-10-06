@@ -4,8 +4,8 @@ from uuid import uuid4
 from sqlalchemy import Connection, Result, ScalarResult, select
 from sqlalchemy.orm import Session
 
-from database import engine
-from database.models import CryptoCourse, CryptoCurrency
+from src.database import engine
+from src.database.models import CryptoCourse, CryptoCurrency
 from src.models import Ticker
 
 
