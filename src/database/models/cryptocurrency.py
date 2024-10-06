@@ -11,10 +11,10 @@ if TYPE_CHECKING:
 
 
 class CryptoCurrency(Base):
-    # __tablename__: str = "Cryptocurrency"
-
     ticker: Mapped[str] = mapped_column(String(8), primary_key=True)
     name: Mapped[str] = mapped_column(String(32))
     description: Mapped[str] = mapped_column(String(4096))
     volume: Mapped[float] = mapped_column(Float, default=0)
-    crypto_course: Mapped[list["CryptoCourse"]] = relationship()
+    crypto_course: Mapped[list["CryptoCourse"]] = relationship(
+        cascade="all, delete"
+    )
