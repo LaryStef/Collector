@@ -20,20 +20,19 @@ class CRUD():
 
             return [ticker[0].lower() for ticker in result.fetchall()]
 
-    @classmethod
-    def update_crypto(cls, course: Ticker) -> None:
+    def update_crypto(self, course: Ticker) -> None:
         with Session(engine) as session:
             hour: int = datetime.now(UTC).hour
             day: int = datetime.now(UTC).date().day
             month: int = datetime.now(UTC).month
 
-            cls.update_course(session, course, type="hour", number=hour)
+            self.update_course(session, course, type="hour", number=hour)
 
             if hour == 0:
-                cls.update_course(session, course, type="day", number=day)
+                self.update_course(session, course, type="day", number=day)
 
             if day == 1 or day == 16:
-                cls.update_course(
+                self.update_course(
                     session,
                     course,
                     type="month",
@@ -47,6 +46,7 @@ class CRUD():
             currency_raw.volume = course.volume
             session.commit()
 
+    @staticmethod
     def update_course(
         session: Connection,
         course: Ticker,
@@ -61,7 +61,7 @@ class CRUD():
             CryptoCourse.number == number).first()
 
         if course_raw is not None:
-            course_raw.price = course.price
+            course_raw.price = round(course.price, ndigits=2)
             return
 
         new_course: ScalarResult[CryptoCourse] = CryptoCourse(
@@ -69,6 +69,6 @@ class CRUD():
             ticker=course.label,
             type_=type,
             number=number,
-            price=course.price
+            price=round(course.price, ndigits=2)
         )
         session.add(new_course)
