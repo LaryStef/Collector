@@ -73,3 +73,6 @@ class CRUD():
             price=round(course.price, ndigits=2)
         )
         session.add(new_course)
+
+
+CRUDobj: CRUD = CRUD()

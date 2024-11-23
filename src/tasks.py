@@ -1,10 +1,13 @@
+from typing import Any
+
 import requests
 from pydantic import ValidationError
 
 from src import celery
-from src.config import API_KEY
-from src.database.service import CRUD
+from src.config import settings
+from src.database.service import CRUDobj
 from src.models import CryptoData
+from src.url import RequestUrl
 
 
 @celery.task(
@@ -13,10 +16,13 @@ from src.models import CryptoData
     default_retry_delay=30,
     time_limit=15
 )
-def collect_prices(self) -> None:
-    tickers: list[str] = CRUD.get_cryptocurrency_tickers()
+def collect_prices(self: Any) -> None:
+    requestUrl: RequestUrl = RequestUrl(
+        api_key=settings.API_KEY,
+        tickers=CRUDobj.get_cryptocurrency_tickers()
+    )
 
-    r: requests.Response = requests.get(url=f"https://www.worldcoinindex.com/apiservice/ticker?key={API_KEY}&label={"btc-".join(tickers) + "btc"}&fiat=usd")  # noqa E501
+    r: requests.Response = requests.get(requestUrl.get_url())
 
     if (r.status_code != 200):
         self.retry()
@@ -28,4 +34,4 @@ def collect_prices(self) -> None:
 
     for course in courses.Markets:
         course.label = course.label.split("/")[0]
-        CRUD.update_crypto(course)
+        CRUDobj.update_crypto(course)
