@@ -18,3 +18,16 @@ class CryptoCurrency(Base):
     crypto_course: Mapped[list["CryptoCourse"]] = relationship(
         cascade="all, delete"
     )
+
+    def __init__(
+        self,
+        *,
+        ticker: str,
+        name: str,
+        description: str,
+        volume: float,
+    ) -> None:
+        self.ticker = ticker
+        self.name = name
+        self.description = description
+        self.volume = volume
