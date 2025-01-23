@@ -1091,7 +1091,7 @@ def _add_test_prices() -> None:
 with Session(engine) as session:
     metadata.create_all(bind=engine)
 
-    # _add_fiat_currencies()
+    _add_fiat_currencies()
     _add_cryptocurrencies()
     _add_test_prices()
 
