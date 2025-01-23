@@ -1,12 +1,10 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, TypeAdapter
 
 
-class Ticker(BaseModel):
-    label: str = Field(alias="Label")
-    price: float = Field(alias="Price")
-    timestamp: int = Field(alias="Timestamp")
-    volume: float = Field(alias="Volume_24h")
+class Coin(BaseModel):
+    ticker: str = Field(alias="symbol")
+    price: float = Field(alias="price_usd")
+    volume: float = Field(alias="volume24")
 
 
-class CryptoData(BaseModel):
-    Markets: list[Ticker]
+coin_list: TypeAdapter = TypeAdapter(list[Coin])
