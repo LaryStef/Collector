@@ -10,7 +10,7 @@ imports: list[str] = ["src.tasks"]
 broker_url: str = f"redis://{getenv('REDIS_USER')}:{getenv('REDIS_PASSWORD')}@host.docker.internal:6379/0"  # noqa: E501
 task_ignore_result: bool = True
 task_time_limit: int = 10
-timezone: str = "UTC"
+timezone: str = "Europe/Moscow"
 broker_connection_retry_on_startup: bool = True
 broker_transport_options: dict[str, int] = {
     "visibility_timeout": 43200

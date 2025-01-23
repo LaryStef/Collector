@@ -1,4 +1,4 @@
-from datetime import UTC, datetime
+from datetime import datetime
 from uuid import uuid4
 
 from sqlalchemy import Result, select
@@ -22,9 +22,9 @@ class CRUD():
 
     def update_crypto(self, coin: Coin) -> None:
         with Session(engine) as session:
-            hour: int = datetime.now(UTC).hour
-            day: int = datetime.now(UTC).date().day
-            month: int = datetime.now(UTC).month
+            hour: int = datetime.now().hour
+            day: int = datetime.now().date().day
+            month: int = datetime.now().month
 
             self._update_course(session, coin, type="hour", number=hour)
 
