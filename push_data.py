@@ -519,7 +519,7 @@ def _add_cryptocurrencies() -> None:
                 <h3>Key features and interoperability</h3>
                 <p>
                     A key aspect of NEAR’s functionality is its “Rainbow
-                    Bridge,” a trustless bridge that enables seamless
+                    Bridge”, a trustless bridge that enables seamless
                     interoperability with the Ethereum network. This allows
                     users to transfer assets and data between the two
                     blockchains, expanding the reach and utility of
