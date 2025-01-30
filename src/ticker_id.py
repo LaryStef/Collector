@@ -12,7 +12,6 @@ class TickerID(IntEnum):
     AVAX: int = 44883
     ADA: int = 257
     XRP: int = 58
-
     NEAR: int = 48563
     AAVE: int = 46018
     DOT: int = 45219

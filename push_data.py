@@ -1,4 +1,5 @@
 import os
+import csv
 from random import uniform, randint
 from string import ascii_letters, digits
 
@@ -953,15 +954,16 @@ def _add_cryptocurrencies() -> None:
     )
 
 
+def _generate_id(length: int) -> str:
+    symbols: str = ascii_letters + digits
+    _id: str = ""
+
+    for _ in range(length):
+        _id += symbols[randint(0, 61)]
+    return _id
+
+
 def _add_test_prices() -> None:
-    def _generate_id(length: int) -> str:
-        symbols: str = ascii_letters + digits
-        _id: str = ""
-
-        for _ in range(length):
-            _id += symbols[randint(0, 61)]
-        return _id
-
     def _push_day_course(min_: float, max_: float, ticker: str):
         for hour in range(24):
             session.add(
@@ -1088,12 +1090,103 @@ def _add_test_prices() -> None:
     _push_year_course(124.84, 230.97, "XMR")
 
 
-with Session(engine) as session:
-    metadata.create_all(bind=engine)
+def _push_data_from_csv(tickers: list[str], session: Session) -> None:
+    counter: int = 0
 
-    _add_fiat_currencies()
-    _add_cryptocurrencies()
-    _add_test_prices()
+    year_dates: list[str] = ["01/01/2025", "01/15/2025"]
+    year_dates.extend([
+        f"{str(i // 2).zfill(2)}/{'01' if i % 2 == 0 else '15'}/2024"
+        for i in range(4, 26)
+    ])
 
-    session.commit()
-    print("Data pushed successfully.")
+    for ticker in tickers:
+        offset: int = 0
+        with open(f"../crypto_prices_data/{ticker}.csv") as file:
+            reader: csv.reader = csv.reader(file)
+            for row in reader:
+                if row[0] in year_dates:
+                    # print(
+                    #     ticker,
+                    #     row[0],
+                    #     float(row[1]),
+                    #     int(row[0].split("/")[0]) * 2 - offset,
+                    #     "month"
+                    # )
+                    session.add(
+                        CryptoCourse(
+                            ID=_generate_id(16),
+                            ticker=ticker,
+                            price=float(row[1]),
+                            type_="month",
+                            number=int(row[0].split("/")[0]) * 2 - offset
+                        )
+                    )
+                    offset = 0 if offset else 1
+                    counter += 1
+
+    month_dates: list[str] = ["12/31/2024"]
+    month_dates.extend([f"01/{str(i).zfill(2)}/2025" for i in range(1, 31)])
+
+    print()
+    for ticker in tickers:
+        with open(f"../crypto_prices_data/{ticker}.csv") as file:
+            reader: csv.reader = csv.reader(file)
+            for row in reader:
+                if row[0] in month_dates:
+                    # print(
+                    #     ticker,
+                    #     row[0],
+                    #     float(row[1]),
+                    #     int(row[0].split("/")[1]),
+                    #     "day"
+                    # )
+                    session.add(
+                        CryptoCourse(
+                            ID=_generate_id(16),
+                            ticker=ticker,
+                            price=float(row[1]),
+                            type_="day",
+                            number=int(row[0].split("/")[1])
+                        )
+                    )
+                    counter += 1
+
+    print(counter)
+
+
+tickers: list[str] = [
+    "USDT",
+    "BTC",
+    "ETH",
+    "SOL",
+    "TRX",
+    "TON",
+    "DOGE",
+    "AVAX",
+    "ADA",
+    "XRP",
+    "NEAR",
+    "AAVE",
+    "DOT",
+    "LINK",
+    "LTC",
+    "SUI",
+    "UNI",
+    "USDC",
+    "XLM",
+    "XMR",
+]
+
+
+if __name__ == "__main__":
+    with Session(engine) as session:
+        metadata.create_all(bind=engine)
+
+        # _add_fiat_currencies()
+        # _add_cryptocurrencies()
+        # _add_test_prices()
+        tickers = ["UNI", "LINK"]
+        _push_data_from_csv(tickers, session)
+
+        session.commit()
+        print("Data pushed successfully.")

@@ -40,8 +40,10 @@ class CRUD():
                 )
 
             currency_raw: CryptoCurrency | None = session.query(
-                CryptoCurrency).where(
-                CryptoCurrency.ticker == coin.ticker).first()
+                CryptoCurrency
+            ).where(
+                CryptoCurrency.ticker == coin.ticker
+            ).first()
 
             if currency_raw is not None:
                 currency_raw.volume = coin.volume
