@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 imports: list[str] = ["src.tasks"]
-broker_url: str = f"redis://{getenv('REDIS_USER')}:{getenv('REDIS_PASSWORD')}@host.docker.internal:6379/0"  # noqa: E501
+broker_url: str = f"redis://{getenv('REDIS_USER')}:{getenv('REDIS_PASSWORD')}@redis:6379/0"  # noqa: E501
 task_ignore_result: bool = True
 task_time_limit: int = 10
 timezone: str = "Europe/Moscow"
