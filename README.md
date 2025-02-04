@@ -1,1 +1,1 @@
-Soon together with Cryptodeal
+Closed beta now:)
