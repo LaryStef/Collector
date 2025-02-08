@@ -22,3 +22,8 @@ class TickerID(IntEnum):
     USDC: int = 33285
     XLM: int = 89
     XMR: int = 28
+    APT: int = 111341
+    OM: int = 45178
+    OKB: int = 33531
+    BNB: int = 2710
+    BGB: int = 67117
